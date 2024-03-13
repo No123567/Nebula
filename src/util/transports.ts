@@ -2,13 +2,7 @@ import {
   SetTransport,
   registerRemoteListener
 } from "@mercuryworkshop/bare-mux";
-
-declare global {
-  interface Window {
-    BareMux: any;
-    p: any;
-  }
-}
+import { isIOS } from "./IosDetector";
 
 function changeTransport(transport: string, wispUrl: string) {
   switch (transport) {
@@ -22,12 +16,22 @@ function changeTransport(transport: string, wispUrl: string) {
       console.log("Setting transport to Libcurl");
       SetTransport("CurlMod.LibcurlClient", {
         wisp: wispUrl,
-        wasm: "/libcurl.wasm"
+        wasm: "https://cdn.jsdelivr.net/npm/libcurl.js@v0.5.2/libcurl.wasm"
       });
       break;
-    //stuff like bare-as-module3 COULD also be added
+    case "bare":
+      localStorage.setItem("transport", "bare");
+      console.log("Setting transport to Bare");
+      const bare =
+        localStorage.getItem("bare") || window.location.origin + "/bare/";
+      console.log("Bare URL: " + bare);
+      SetTransport("BareMod.BareClient", bare);
+      break;
     default:
-      SetTransport("EpxMod.EpoxyClient", { wisp: wispUrl });
+      SetTransport("CurlMod.LibcurlClient", {
+        wisp: wispUrl,
+        wasm: "/libcurl.wasm"
+      });
       break;
   }
 }
@@ -41,9 +45,18 @@ const wispUrl =
   location.host +
   "/wisp/";
 registerRemoteListener(navigator.serviceWorker.controller!);
-changeTransport(
-  localStorage.getItem("transport") || "epoxy",
-  localStorage.getItem("wispUrl") || wispUrl
-);
+
+if (isIOS) {
+  console.log("iOS device detected. Bare will be used.");
+  changeTransport(
+    localStorage.getItem("transport") || "libcurl",
+    localStorage.getItem("wispUrl") || wispUrl
+  );
+} else {
+  changeTransport(
+    localStorage.getItem("transport") || "bare",
+    localStorage.getItem("wispUrl") || wispUrl
+  );
+}
 
 export { changeTransport, getTransport };
