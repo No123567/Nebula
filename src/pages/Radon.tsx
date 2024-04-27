@@ -3,6 +3,8 @@ interface Window {
   __uv$config: any;
 }
 export function Radon() {
+  //make sure there is a transport set
+  //setTransport();
   return (
     <HeaderRoute>
       <iframe

@@ -4,9 +4,14 @@ import preact from "@preact/preset-vite";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import { uvPath } from "@titaniumnetwork-dev/ultraviolet";
 import { dynamicPath } from "@nebula-services/dynamic";
+//@ts-ignore
 import { epoxyPath } from "@mercuryworkshop/epoxy-transport";
+//@ts-ignore
 import { libcurlPath } from "@mercuryworkshop/libcurl-transport";
 import path from "path";
+import { createBareServer } from "@tomphttp/bare-server-node";
+import wisp from "wisp-server-node";
+import http from "http";
 const __dirname = path.resolve();
 
 export default defineConfig({
@@ -48,10 +53,21 @@ export default defineConfig({
   ],
   server: {
     proxy: {
-      "/bare": {
-        target: "http://localhost:8080/",
+      "/bare/": {
+        target: "http://localhost:8080/bare/",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/bare/, "")
+        rewrite: (path) => path.replace(/^\/bare\//, "")
+      },
+      "/wisp/": {
+        target: "http://localhost:8080/wisp/",
+        changeOrigin: true,
+        ws: true,
+        rewrite: (path) => path.replace(/^\/wisp\//, "")
+      },
+      "/search": {
+        target: "http://localhost:8080/search",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/search/, "")
       }
     }
   }

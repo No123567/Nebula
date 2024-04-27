@@ -1,32 +1,15 @@
-import { useState, useEffect } from "preact/hooks";
+import { useState } from "preact/hooks";
 import { FaAngleDown } from "react-icons/fa";
+import { useTheme } from "../../components/ThemeProvider";
+import { useTranslation } from "react-i18next";
 
-interface Option {
-  id: string;
-  label: string; // Translations CAN be passed
-  image?: any;
-}
-
-const Dropdown = ({
-  storageKey,
-  options,
-  refresh
-}: {
-  storageKey: string;
-  options: Option[];
-  refresh: boolean;
-}) => {
+const ThemeDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
-
-  const [choice, setChoice] = useState(() => {
-    return localStorage.getItem(storageKey) || options[0]?.id || "";
+  const { t } = useTranslation();
+  const { theme, setTheme, themes } = useTheme();
+  const options = themes.map((theme) => {
+    return { id: theme, label: t(`themes.${theme}`) };
   });
-
-  // update on localstorage change
-  useEffect(() => {
-    setChoice(localStorage.getItem(storageKey) || options[0]?.id || "");
-  }, [storageKey, options]);
-
   return (
     <div className="relative text-center">
       <div
@@ -38,13 +21,7 @@ const Dropdown = ({
         <div className="flex h-full w-full select-none flex-row items-center">
           <div className="h-full w-1/4"></div>
           <div className="flex w-2/4 flex-row items-center justify-center text-input-text">
-            {options.find((o) => o.id === choice)?.image && (
-              <img
-                src={options.find((o) => o.id === choice)?.image}
-                className="mr-2 h-6 w-6"
-              />
-            )}
-            {options.find((o) => o.id === choice)?.label}
+            {options.find((o) => o.id === theme)?.label}
           </div>
           <div className="flex w-1/4 flex-col items-center text-input-text">
             <FaAngleDown />
@@ -60,20 +37,9 @@ const Dropdown = ({
                 }`}
                 onClick={() => {
                   setIsOpen(false);
-                  setChoice(option.id);
-                  localStorage.setItem(storageKey, option.id);
-                  if (refresh === true) {
-                    window.location.reload();
-                  }
+                  setTheme(option.id);
                 }}
               >
-                {option.image && (
-                  <img
-                    src={option.image}
-                    alt="Option Image"
-                    className="mr-2 h-6 w-6"
-                  />
-                )}
                 {option.label}
               </div>
             ))}
@@ -84,4 +50,4 @@ const Dropdown = ({
   );
 };
 
-export default Dropdown;
+export default ThemeDropdown;

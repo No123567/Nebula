@@ -1,13 +1,18 @@
-import { useState, useEffect } from "preact/hooks";
 import { FaAngleDown } from "react-icons/fa";
+import { useState, useEffect } from "preact/hooks";
+import { changeTransport } from "../../util/transports.ts";
+const wispUrl =
+  localStorage.getItem("wispUrl") ||
+  (location.protocol === "https:" ? "wss://" : "ws://") +
+    location.host +
+    "/wisp/";
 
 interface Option {
   id: string;
   label: string; // Translations CAN be passed
-  image?: any;
 }
 
-const Dropdown = ({
+const TransportDropdown = ({
   storageKey,
   options,
   refresh
@@ -37,13 +42,7 @@ const Dropdown = ({
       >
         <div className="flex h-full w-full select-none flex-row items-center">
           <div className="h-full w-1/4"></div>
-          <div className="flex w-2/4 flex-row items-center justify-center text-input-text">
-            {options.find((o) => o.id === choice)?.image && (
-              <img
-                src={options.find((o) => o.id === choice)?.image}
-                className="mr-2 h-6 w-6"
-              />
-            )}
+          <div className="flex w-2/4 flex-col items-center text-input-text">
             {options.find((o) => o.id === choice)?.label}
           </div>
           <div className="flex w-1/4 flex-col items-center text-input-text">
@@ -55,25 +54,19 @@ const Dropdown = ({
             {options.map((option, index) => (
               <div
                 key={option.id}
-                className={`flex flex-row justify-center border border-input-border-color bg-input p-2 text-input-text hover:bg-dropdown-option-hover-color ${
+                className={`border border-input-border-color bg-input p-2 text-input-text hover:bg-dropdown-option-hover-color ${
                   index === options.length - 1 ? "rounded-b-2xl" : ""
                 }`}
                 onClick={() => {
                   setIsOpen(false);
                   setChoice(option.id);
                   localStorage.setItem(storageKey, option.id);
+                  changeTransport(option.id, wispUrl);
                   if (refresh === true) {
                     window.location.reload();
                   }
                 }}
               >
-                {option.image && (
-                  <img
-                    src={option.image}
-                    alt="Option Image"
-                    className="mr-2 h-6 w-6"
-                  />
-                )}
                 {option.label}
               </div>
             ))}
@@ -84,4 +77,4 @@ const Dropdown = ({
   );
 };
 
-export default Dropdown;
+export default TransportDropdown;

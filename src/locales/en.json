@@ -24,7 +24,8 @@
       "proxy": "Proxy",
       "tab": "Tab",
       "custom": "Customization",
-      "misc": "Misc"
+      "misc": "Misc",
+      "credits": "Credits"
     },
     "proxy": {
       "title": "Proxy",
@@ -56,10 +57,25 @@
       "subtitle": "Enter the URL of your bare server",
       "select": "Select"
     },
+    "wisp": {
+      "title": "Wisp Server",
+      "subtitle": "Enter the url of a Wisp server",
+      "select": "Select"
+    },
+    "transport": {
+      "title": "Transport",
+      "desc": "Select the transport to use"
+    },
     "theme": {
       "title": "Theme",
       "subtitle": "Choose a theme so your eyes don't hate us",
-      "select": "Select"
+      "select": "Select",
+      "particles": "Particles",
+      "particlesDesc": "Choose a particles wallpaper",
+      "particlesNone": "None",
+      "background": "Background",
+      "backgroundDesc": "Choose a background image",
+      "backgroundNone": "None"
     },
     "httpProxy": {
       "title": "(Advanced) HTTP Proxy",
@@ -80,10 +96,11 @@
   "themes": {
     "main": "Main",
     "hacker": "Hacker",
-    "catppuccinMocha": "Catppuccin Mocha",
-    "catppuccinMacchiato": "Catppuccin Macchiato",
-    "catppuccinFrappe": "Catppuccin Frappe",
-    "catppuccinLatte": "Catppuccin Latte"
+    "crismas": "Crismas🐴🎄",
+    "catppuccin-mocha": "Catppuccin Mocha",
+    "catppuccin-macchiato": "Catppuccin Macchiato",
+    "catppuccin-frappe": "Catppuccin Frappe",
+    "catppuccin-latte": "Catppuccin Latte"
   },
   "clipboard": "URL copied to clipboard!",
   "bareError": "That didn't quite work. Double check that the bare server exists and isn't blocked.",
@@ -117,5 +134,10 @@
       "q": "Nebula is slow.",
       "a": "You might be connected to the wrong server. Check the bare server you are connected to and make sure its the country you're closest to."
     }
+  },
+  "credits": {
+    "devs": "Site Developers",
+    "jpTranslators": "Japanese Translators",
+    "esTranslators": "Spanish Translators"
   }
 }
